@@ -5,7 +5,7 @@ app = FastAPI()
 
 summarizer = pipeline(
     "summarization",
-    model="./",
+    model="phoodis/thai-news-summarizer"
 )
 
 @app.get("/")
