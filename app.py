@@ -1,9 +1,13 @@
 from fastapi import FastAPI
+from pydantic import BaseModel
 from transformers import pipeline
 
 app = FastAPI()
 
 summarizer = None
+
+class TextRequest(BaseModel):
+    text: str
 
 def get_model():
     global summarizer
@@ -17,11 +21,11 @@ def get_model():
 
 @app.get("/")
 def home():
-    return {"status": "AI summarizer running"}
+    return {"status": "Thai News AI Summarizer running"}
 
 
 @app.post("/summarize")
-def summarize(text: str):
+def summarize(req: TextRequest):
     model = get_model()
-    result = model(text, max_length=100, min_length=30)
+    result = model(req.text, max_length=120, min_length=30)
     return {"summary": result[0]["summary_text"]}
