@@ -1,6 +1,6 @@
 ---
 library_name: transformers
-tags: []
+pipeline_tag: summarization
 ---
 
 # Model Card for Model ID
