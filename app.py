@@ -5,7 +5,7 @@ import os
 
 app = FastAPI()
 
-HF_API_URL = "https://api-inference.huggingface.co/models/phoodis/thai-news-summarizer"
+HF_API_URL = "https://router.huggingface.co/hf-inference/models/phoodis/thai-news-summarizer"
 HF_TOKEN = os.environ.get("HF_TOKEN")
 
 headers = {
