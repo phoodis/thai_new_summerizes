@@ -13,7 +13,7 @@ def get_model():
     global summarizer
     if summarizer is None:
         summarizer = pipeline(
-            "summarization",
+            "text2text-generation",
             model="phoodis/thai-news-summarizer"
         )
     return summarizer
@@ -28,4 +28,4 @@ def home():
 def summarize(req: TextRequest):
     model = get_model()
     result = model(req.text, max_length=120, min_length=30)
-    return {"summary": result[0]["summary_text"]}
+    return {"summary": result[0]["generated_text"]}
