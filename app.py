@@ -8,7 +8,6 @@ app = FastAPI()
 HF_API_URL = "https://api-inference.huggingface.co/models/phoodis/thai-news-summarizer"
 HF_TOKEN = os.environ.get("HF_TOKEN")
 
-print("HF TOKEN:", HF_TOKEN) #for debug
 headers = {
     "Authorization": f"Bearer {HF_TOKEN}"
 }
@@ -27,6 +26,7 @@ def summarize(req: TextRequest):
 
     payload = {
         "inputs": req.text,
+        "options": {"wait_for_model": True},
         "parameters": {
             "max_length": 120,
             "min_length": 30
@@ -37,10 +37,10 @@ def summarize(req: TextRequest):
 
     result = response.json()
 
-    # ป้องกัน error
-    if isinstance(result, dict) and "error" in result:
-        return {"error": result["error"]}
+    print("HF RESPONSE:", result)
 
-    summary = result[0]["generated_text"]
+    if isinstance(result, list):
+        summary = result[0].get("generated_text", "")
+        return {"summary": summary}
 
-    return {"summary": summary}
+    return {"error": result}
