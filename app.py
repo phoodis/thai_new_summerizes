@@ -1,32 +1,43 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
-from transformers import pipeline
+import requests
+import os
 
 app = FastAPI()
 
-summarizer = None
+HF_API_URL = "https://api-inference.huggingface.co/models/phoodis/thai-news-summarizer"
+HF_TOKEN = os.environ.get("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")
+
+headers = {
+    "Authorization": f"Bearer {HF_TOKEN}"
+}
 
 class TextRequest(BaseModel):
     text: str
 
-def get_model():
-    global summarizer
-    if summarizer is None:
-        summarizer = pipeline(
-            "text2text-generation",
-            model="phoodis/thai-news-summarizer"
-        )
-    return summarizer
 
 @app.get("/")
 def home():
     return {"status": "Thai News AI Summarizer running"}
 
+
 @app.post("/summarize")
 def summarize(req: TextRequest):
-    model = get_model()
-    result = model(req.text, max_length=120, min_length=30)
+
+    payload = {
+        "inputs": req.text,
+        "parameters": {
+            "max_length": 120,
+            "min_length": 30
+        }
+    }
+
+    response = requests.post(HF_API_URL, headers=headers, json=payload)
+
+    result = response.json()
+
+    summary = result[0]["generated_text"]
 
     return {
-        "summary": result[0]["generated_text"]
+        "summary": summary
     }
