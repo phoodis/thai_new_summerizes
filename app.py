@@ -8,6 +8,7 @@ app = FastAPI()
 HF_API_URL = "https://api-inference.huggingface.co/models/phoodis/thai-news-summarizer"
 HF_TOKEN = os.environ.get("HF_TOKEN")
 
+print("HF TOKEN:", HF_TOKEN) #for debug
 headers = {
     "Authorization": f"Bearer {HF_TOKEN}"
 }
