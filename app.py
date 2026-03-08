@@ -18,16 +18,15 @@ def get_model():
         )
     return summarizer
 
-
 @app.get("/")
 def home():
     return {"status": "Thai News AI Summarizer running"}
 
-
 @app.post("/summarize")
 def summarize(req: TextRequest):
-    # model = get_model()
-    # result = model(req.text, max_length=120, min_length=30)
-    # return {"summary": result[0]["generated_text"]}
-    return {"request":req}
-            
+    model = get_model()
+    result = model(req.text, max_length=120, min_length=30)
+
+    return {
+        "summary": result[0]["generated_text"]
+    }
